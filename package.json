@@ -1,15 +1,28 @@
 {
-  "name": "nodejs",
+  "name": "lionhead-sms-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "SMS API for legal assistant using Twilio and OpenAI",
+  "main": "app.js",
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "sms",
+    "twilio",
+    "openai",
+    "legal-assistant"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^22.13.11"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "openai": "^4.20.1",
+    "twilio": "^4.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

@@ -73,10 +73,12 @@ Phone: ${leadInfo.phone}
 City: ${leadInfo.city}
 Summary of Legal Concern: ${leadInfo.legalConcern}`;
 
+    const phoneNumber = leadInfo.phoneNumber;
+
     const twilioMessage = await client.messages.create({
       body: messageBody,
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: LEAD_NOTIFICATION_PHONE,
+      to: phoneNumber,
     });
 
     console.log("Lead notification sent:", twilioMessage.sid);

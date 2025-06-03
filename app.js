@@ -65,15 +65,20 @@ function cleanupExpiredContexts() {
 setInterval(cleanupExpiredContexts, 60 * 60 * 1000);
 
 // Function to send qualified lead notification
-async function sendQualifiedLeadNotification(leadInfo) {
+async function sendQualifiedLeadNotification(leadInfo, normalizedPhoneNumber) {
+  console.log(leadInfo);
+  console.log(normalizedPhoneNumber);
+
   try {
     const messageBody = `New Qualified Lead:
 Full Name: ${leadInfo.fullName}
-Phone: ${leadInfo.phone}
+Phone: ${normalizedPhoneNumber}
 City: ${leadInfo.city}
 Summary of Legal Concern: ${leadInfo.legalConcern}`;
 
     const phoneNumber = leadInfo.phoneNumber;
+
+    console.log(phoneNumber);
 
     const twilioMessage = await client.messages.create({
       body: messageBody,
@@ -90,7 +95,7 @@ Summary of Legal Concern: ${leadInfo.legalConcern}`;
 }
 
 // Handle function calls from the assistant
-async function handleFunctionCall(toolCall) {
+async function handleFunctionCall(toolCall, normalizedPhoneNumber) {
   const functionName = toolCall.function.name;
   const functionArgs = JSON.parse(toolCall.function.arguments);
 
@@ -99,7 +104,10 @@ async function handleFunctionCall(toolCall) {
   switch (functionName) {
     case "send_qualified_lead":
       try {
-        await sendQualifiedLeadNotification(functionArgs);
+        await sendQualifiedLeadNotification(
+          functionArgs,
+          normalizedPhoneNumber,
+        );
         return {
           tool_call_id: toolCall.id,
           output:
@@ -270,7 +278,10 @@ app.post("/lionhead-sms", async (req, res) => {
       const toolOutputs = [];
 
       for (const toolCall of toolCalls) {
-        const output = await handleFunctionCall(toolCall);
+        const output = await handleFunctionCall(
+          toolCall,
+          normalizedPhoneNumber,
+        );
         toolOutputs.push(output);
       }
 
